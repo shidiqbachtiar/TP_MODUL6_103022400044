@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace TP_MODUL6_103022400044
@@ -13,6 +14,9 @@ namespace TP_MODUL6_103022400044
 
         public SayaMusicTrack(string title)
         {
+            Debug.Assert(title != null, "Title tidak boleh null");
+            Debug.Assert(title.Length <= 100, "Title maksimal 100 karakter");
+
             Random rand = new Random();
             this.id = rand.Next(1000000, 9999999);
             this.title = title;
@@ -21,7 +25,19 @@ namespace TP_MODUL6_103022400044
 
         public void IncreasePlayCount(int count)
         {
-            playCount += count;
+            Debug.Assert(count <= 10000000, "Penambahan play count maksimal 10 juta");
+
+            try
+            {
+                checked
+                {
+                    playCount += count;
+                }
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Terjadi overflow pada play count!");
+            }
         }
 
         public void PrintTrackDetails()
